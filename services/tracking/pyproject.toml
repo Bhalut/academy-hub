@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tracking"
+version = "0.1.0"
+description = "A service for user data tracking with FastAPI and MongoDB."
+authors = [
+    { name = "Abdel Mejia", email = "abdel.mejia@polygon.us" }
+]
+license = "MIT"
+dependencies = [
+    "fastapi~=0.115.7", # Última versión estable de FastAPI.
+    "pymongo[srv]~=4.11", # Última versión de PyMongo con soporte para SRV URIs.
+    "motor~=3.6.1", # Motor async para MongoDB.
+    "python-dotenv~=1.0.0", # Carga de variables de entorno.
+    "uvicorn[standard]~=0.34.0", # Servidor ASGI con soporte completo.
+    "pydantic[email]~=2.10.6", # Validación moderna con Pydantic 2.x.
+    "pydantic-settings~=2.7.1",
+    "confluent-kafka~=2.8.0",
+    "celery",
+    "redis",
+    "prometheus-client", # Cliente de métricas para Prometheus
+    "opentelemetry-api",
+    "opentelemetry-sdk",
+    "opentelemetry-instrumentation-fastapi",
+    "opentelemetry-instrumentation-logging",
+    "opentelemetry-instrumentation-requests",
+    "opentelemetry-exporter-otlp",
+    "scikit-learn",
+    "pandas",
+    "numpy",
+    "requests", # Para consumir logs desde Loki
+    "matplotlib",
+    "joblib",  # Para guardar el modelo entrenado
+    "tensorflow",  # Para entrenar LSTM
+    "torch", "transformers",  # Para Transformers
+    "sentencepiece"  # Necesario para BERT Tokenizer
+]
+
+[project.optional-dependencies]
+docs = [""]
+tests = [
+    "pytest",
+]
+
+[tool.hatch.build.targets.sdist]
+[tool.hatch.build.targets.wheel]
+packages = ["src/app/main"]
+
+[tool.hatch.envs.default]
+path = ".venv"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict = true

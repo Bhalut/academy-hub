@@ -1,0 +1,11 @@
+apiVersion: 1
+notifiers:
+  - name: "Slack Alerts"
+    type: "slack"
+    uid: "slack-alerts"
+    org_id: 1
+    is_default: true
+    settings:
+      url: "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK"
+      channel: "#alerts"
+      username: "Grafana"

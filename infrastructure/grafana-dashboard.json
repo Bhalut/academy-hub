@@ -1,0 +1,253 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "FastAPI & Celery Monitoring",
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Requests per Second",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(request_latency_seconds_count[1m])",
+            "legendFormat": "Requests per second",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "title": "Request Latency",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "B"
+          }
+        ]
+      },
+      {
+        "title": "Celery Tasks Processed",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "events_processed_total",
+            "legendFormat": "Celery Tasks",
+            "refId": "C"
+          }
+        ]
+      },
+      {
+        "title": "Celery Task Failures",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "events_failed_total",
+            "legendFormat": "Failed Tasks",
+            "refId": "D"
+          }
+        ]
+      },
+      {
+        "title": "Request Latency (p95)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(request_latency_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p95 Latency",
+            "refId": "B"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  0.5
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "B"
+                ]
+              },
+              "reducer": {
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "name": "High Latency Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "title": "Celery Task Failures",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "events_failed_total",
+            "legendFormat": "Failed Tasks",
+            "refId": "D"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  5
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "D"
+                ]
+              },
+              "reducer": {
+                "type": "sum"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "name": "Celery Task Failures Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "title": "Log Anomalies",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "log_anomalies_detected",
+            "legendFormat": "Detected Anomalies",
+            "refId": "E"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  2
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "E"
+                ]
+              },
+              "reducer": {
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "name": "Log Anomaly Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "title": "LSTM Log Anomalies",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "lstm_log_anomalies",
+            "legendFormat": "Anomalías LSTM",
+            "refId": "F"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  3
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "F"
+                ]
+              },
+              "reducer": {
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "name": "LSTM Log Anomaly Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "title": "BERT Log Anomalies",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "bert_log_anomalies",
+            "legendFormat": "Anomalías BERT",
+            "refId": "G"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {
+                "params": [
+                  3
+                ],
+                "type": "gt"
+              },
+              "operator": {
+                "type": "and"
+              },
+              "query": {
+                "params": [
+                  "G"
+                ]
+              },
+              "reducer": {
+                "type": "avg"
+              },
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "for": "5m",
+          "name": "BERT Log Anomaly Alert",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      }
+    ]
+  }
+}
