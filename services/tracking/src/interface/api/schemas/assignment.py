@@ -8,9 +8,13 @@ from . import BaseEvent
 class AssignmentEvent(BaseEvent):
     course_id: str = Field(..., description="Associated course ID.")
     assignment_id: str = Field(..., description="Unique ID for the assignment.")
-    submission_status: str = Field(..., description="Status of the submission (e.g., submitted, late).")
+    submission_status: str = Field(
+        ..., description="Status of the submission (e.g., submitted, late)."
+    )
     score: Optional[float] = Field(None, description="Score achieved, if applicable.")
-    feedback: Optional[str] = Field(None, description="Feedback provided by the instructor.")
+    feedback: Optional[str] = Field(
+        None, description="Feedback provided by the instructor."
+    )
     metadata: Optional[dict] = Field(None, description="Additional metadata.")
 
     model_config = {
@@ -24,7 +28,7 @@ class AssignmentEvent(BaseEvent):
                 "submission_status": "submitted",
                 "score": 95.0,
                 "feedback": "Good job!",
-                "metadata": {"source": "web"}
+                "metadata": {"source": "web"},
             }
         }
     }

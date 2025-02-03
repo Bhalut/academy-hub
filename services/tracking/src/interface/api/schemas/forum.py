@@ -8,8 +8,12 @@ from . import BaseEvent
 class ForumEvent(BaseEvent):
     forum_id: str = Field(..., description="Unique ID of the forum.")
     post_id: str = Field(..., description="Unique ID of the post.")
-    action: str = Field(..., description="Action performed (e.g., created_post, liked, replied).")
-    metadata: Optional[dict] = Field(default={}, description="Additional data specific to the forum interaction.")
+    action: str = Field(
+        ..., description="Action performed (e.g., created_post, liked, replied)."
+    )
+    metadata: Optional[dict] = Field(
+        default={}, description="Additional data specific to the forum interaction."
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -20,7 +24,7 @@ class ForumEvent(BaseEvent):
                 "forum_id": "forum_123",
                 "post_id": "post_456",
                 "action": "liked",
-                "metadata": {"comment": "Great discussion!"}
+                "metadata": {"comment": "Great discussion!"},
             }
         }
     }

@@ -1,7 +1,11 @@
-from shared.logger import log_event, log_error
-from shared.repository.mongo_repository import MongoRepository
 from ...config.tasks import process_event_data
-from shared.repository.kafka_producer import send_event_to_kafka
+from ...infrastructure.messaging.kafka_producer import (
+    send_event_to_kafka,
+)
+from ...infrastructure.persistence.mongo_repository import (
+    MongoRepository,
+)
+from shared.logger import log_error, log_event
 
 repo = MongoRepository()
 

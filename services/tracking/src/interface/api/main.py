@@ -9,7 +9,7 @@ from .routes import router
 
 app = FastAPI(
     title="User Data Tracking Service",
-    docs_url="/docs" if os.getenv("ENV") == "development" else None
+    docs_url="/docs" if os.getenv("ENV") == "development" else None,
 )
 
 app.add_middleware(

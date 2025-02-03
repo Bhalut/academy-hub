@@ -6,8 +6,12 @@ from . import BaseEvent
 class LessonEvent(BaseEvent):
     course_id: str = Field(..., description="Associated course ID.")
     lesson_id: str = Field(..., description="Unique ID for the lesson.")
-    duration: float = Field(..., ge=0, description="Time spent on the lesson in seconds.")
-    completion_status: str = Field(..., description="Completion status (e.g., completed, not_started).")
+    duration: float = Field(
+        ..., ge=0, description="Time spent on the lesson in seconds."
+    )
+    completion_status: str = Field(
+        ..., description="Completion status (e.g., completed, not_started)."
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -18,7 +22,7 @@ class LessonEvent(BaseEvent):
                 "course_id": "course_123",
                 "lesson_id": "lesson_456",
                 "duration": 1800,
-                "completion_status": "completed"
+                "completion_status": "completed",
             }
         }
     }

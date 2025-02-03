@@ -8,7 +8,8 @@ from . import BaseEvent
 class LoginEvent(BaseEvent):
     ip_address: str = Field(..., description="IP address of the user.")
     device: dict = Field(
-        ..., description="Device details, including type (desktop/mobile), browser, and operating system."
+        ...,
+        description="Device details, including type (desktop/mobile), browser, and operating system.",
     )
     geo_location: Optional[dict] = Field(
         None, description="Geographic location of the user, including country and city."
@@ -22,7 +23,7 @@ class LoginEvent(BaseEvent):
                 "timestamp": "2025-01-31T12:00:00Z",
                 "ip_address": "192.168.1.1",
                 "device": {"type": "mobile", "browser": "Chrome", "os": "Android"},
-                "geo_location": {"country": "USA", "city": "New York"}
+                "geo_location": {"country": "USA", "city": "New York"},
             }
         }
     }

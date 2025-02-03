@@ -11,7 +11,7 @@ TOPIC = os.getenv("KAFKA_TOPIC", "tracking_events")
 consumer = KafkaConsumer(
     TOPIC,
     bootstrap_servers=KAFKA_BROKER,
-    value_deserializer=lambda v: json.loads(v.decode("utf-8"))
+    value_deserializer=lambda v: json.loads(v.decode("utf-8")),
 )
 
 for message in consumer:

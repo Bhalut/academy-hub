@@ -1,17 +1,23 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-
+from services.tracking.src.application.services.event_processor import process_event
+from services.tracking.src.infrastructure.persistence.mongo_repository import (
+    MongoRepository,
+)
+from services.tracking.src.interface.api.schemas import EventSchema
 from shared.logger import log_error
-from shared.repository.mongo_repository import MongoRepository
-from .schemas import EventSchema
-from .services.event_processor import process_event
 
 router = APIRouter()
-repo = MongoRepository()
+
+
+def get_mongo_repo() -> MongoRepository:
+    return MongoRepository()
 
 
 @router.post("/events/", response_class=ORJSONResponse)
-async def create_event(event: EventSchema):
+async def create_event(
+    event: EventSchema, repo: MongoRepository = Depends(get_mongo_repo)
+):
     event_data = event.model_dump(by_alias=True)
 
     result = await process_event(event_data)
@@ -23,7 +29,7 @@ async def create_event(event: EventSchema):
 
 
 @router.get("/health/", response_class=ORJSONResponse)
-async def health_check():
+async def health_check(repo: MongoRepository = Depends(get_mongo_repo)):
     try:
         mongo_status = await repo.find_all("health_check", {}) is not None
 
@@ -32,14 +38,9 @@ async def health_check():
                 "status": "ok",
                 "mongo": mongo_status,
                 "prometheus": True,
-                "kafka": True
+                "kafka": True,
             }
         )
     except Exception as e:
         log_error(f"Health check failed: {str(e)}")
-        return ORJSONResponse(
-            content={
-                "status": "error",
-                "message": str(e)
-            }
-        )
+        raise HTTPException(status_code=500, detail=str(e))

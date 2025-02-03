@@ -1,4 +1,4 @@
-from shared.metrics import EVENTS_PROCESSED, EVENTS_FAILED
+from shared.metrics import EVENTS_FAILED, EVENTS_PROCESSED
 
 
 def collect_metrics(event_status: str):

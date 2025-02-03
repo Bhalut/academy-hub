@@ -6,8 +6,12 @@ from . import BaseEvent
 class ProgressEvent(BaseEvent):
     course_id: str = Field(..., description="Associated course ID.")
     lesson_id: str = Field(..., description="Associated lesson ID.")
-    progress_percentage: float = Field(..., ge=0, le=100, description="Completion percentage.")
-    completion_status: str = Field(..., description="Status of progress (e.g., completed, in_progress).")
+    progress_percentage: float = Field(
+        ..., ge=0, le=100, description="Completion percentage."
+    )
+    completion_status: str = Field(
+        ..., description="Status of progress (e.g., completed, in_progress)."
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -18,7 +22,7 @@ class ProgressEvent(BaseEvent):
                 "course_id": "course_456",
                 "lesson_id": "lesson_789",
                 "progress_percentage": 75.5,
-                "completion_status": "in_progress"
+                "completion_status": "in_progress",
             }
         }
     }

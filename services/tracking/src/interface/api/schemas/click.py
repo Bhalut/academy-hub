@@ -9,8 +9,12 @@ class ClickEvent(BaseEvent):
     course_id: Optional[str] = Field(None, description="Associated course ID.")
     page: str = Field(..., description="Page where the interaction occurred.")
     action: str = Field(..., description="Action performed (e.g., clicked, opened).")
-    element_id: str = Field(..., description="Unique identifier of the interacted element.")
-    metadata: Optional[dict] = Field(None, description="Additional metadata about the event.")
+    element_id: str = Field(
+        ..., description="Unique identifier of the interacted element."
+    )
+    metadata: Optional[dict] = Field(
+        None, description="Additional metadata about the event."
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -21,7 +25,7 @@ class ClickEvent(BaseEvent):
                 "page": "home",
                 "action": "clicked",
                 "element_id": "btn_login",
-                "metadata": {"css_class": "btn-primary"}
+                "metadata": {"css_class": "btn-primary"},
             }
         }
     }

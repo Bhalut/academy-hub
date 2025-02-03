@@ -8,7 +8,9 @@ from . import BaseEvent
 class QuizQuestionDetail(BaseModel):
     question_id: str = Field(..., description="Unique ID for the question.")
     correct: bool = Field(..., description="Whether the answer was correct.")
-    time_spent: float = Field(..., ge=0, description="Time spent on the question in seconds.")
+    time_spent: float = Field(
+        ..., ge=0, description="Time spent on the question in seconds."
+    )
 
 
 class QuizEvent(BaseEvent):
@@ -18,7 +20,9 @@ class QuizEvent(BaseEvent):
     score: float = Field(..., ge=0, description="Score achieved by the user.")
     max_score: float = Field(..., ge=0, description="Maximum possible score.")
     time_taken: float = Field(..., ge=0, description="Time taken to complete the quiz.")
-    questions: List[QuizQuestionDetail] = Field(..., description="Details of each question attempted during the quiz.")
+    questions: List[QuizQuestionDetail] = Field(
+        ..., description="Details of each question attempted during the quiz."
+    )
 
     model_config = {
         "json_schema_extra": {
@@ -34,8 +38,8 @@ class QuizEvent(BaseEvent):
                 "time_taken": 600,
                 "questions": [
                     {"question_id": "q1", "correct": True, "time_spent": 30},
-                    {"question_id": "q2", "correct": False, "time_spent": 45}
-                ]
+                    {"question_id": "q2", "correct": False, "time_spent": 45},
+                ],
             }
         }
     }

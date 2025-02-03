@@ -1,5 +1,6 @@
-from shared.logger import log_event, log_error
-from shared.metrics import EVENTS_PROCESSED, EVENTS_FAILED
+from shared.logger import log_error, log_event
+from shared.metrics import EVENTS_FAILED, EVENTS_PROCESSED
+
 from .celery_config import celery_app
 
 

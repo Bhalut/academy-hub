@@ -1,4 +1,4 @@
-from prometheus_client import Counter, Histogram, Gauge
+from prometheus_client import Counter, Gauge, Histogram
 
 EVENTS_PROCESSED = Counter("events_processed_total", "Total events processed")
 EVENTS_FAILED = Counter("events_failed_total", "Total failed events")

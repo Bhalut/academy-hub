@@ -1,12 +1,21 @@
 from typing import Optional
+
 from pydantic import Field
+
 from . import BaseEvent
+
 
 class FeedbackEvent(BaseEvent):
     course_id: str = Field(..., description="Associated course ID.")
-    feedback_type: str = Field(..., description="Type of feedback (e.g., lesson, quiz).")
-    rating: int = Field(..., ge=1, le=5, description="Rating provided by the user (1 to 5).")
-    comments: Optional[str] = Field(None, description="Additional comments from the user.")
+    feedback_type: str = Field(
+        ..., description="Type of feedback (e.g., lesson, quiz)."
+    )
+    rating: int = Field(
+        ..., ge=1, le=5, description="Rating provided by the user (1 to 5)."
+    )
+    comments: Optional[str] = Field(
+        None, description="Additional comments from the user."
+    )
     metadata: Optional[dict] = Field(None, description="Additional metadata.")
 
     model_config = {
@@ -19,7 +28,7 @@ class FeedbackEvent(BaseEvent):
                 "feedback_type": "lesson",
                 "rating": 4,
                 "comments": "Great content!",
-                "metadata": {"source": "mobile_app"}
+                "metadata": {"source": "mobile_app"},
             }
         }
     }
