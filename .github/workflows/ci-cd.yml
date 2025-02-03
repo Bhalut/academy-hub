@@ -13,6 +13,23 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:8.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "echo 'db.runCommand(\"ping\").ok' | mongosh localhost:27017 --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -25,11 +42,22 @@ jobs:
       - name: Install Hatch
         run: pip install hatch
 
-      - name: Install Dependencies
-        run: hatch run pip install -r services/tracking/pyproject.toml
+      - name: Install dependencies
+        run: hatch env create && hatch run pip install .
+
+      - name: Run linters and type checks
+        run: |
+          hatch run black --check src
+          hatch run isort --check-only src
+          hatch run mypy src
 
       - name: Run Tests
-        run: hatch run pytest services/tracking/src/tests --cov=services/tracking/src --cov-report=xml
+        run: hatch run pytest services/tracking/tests --cov=services/tracking/src --cov-report=xml
+
+      - name: Build Docker Image
+        run: |
+          cd services/tracking
+          docker build -t tracking-service .
 
       - name: Upload Coverage Report
         uses: codecov/codecov-action@v3
