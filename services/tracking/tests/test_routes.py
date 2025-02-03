@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from services.tracking.src.app.main import app
+from services.tracking.src.interface.api.main import app
 
 client = TestClient(app)
 
