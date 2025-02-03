@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && pip install hatch && pip install .
 
 COPY src /app/src
 
-CMD ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "src/interface/api/main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

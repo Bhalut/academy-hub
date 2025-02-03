@@ -11,43 +11,56 @@ authors = [
 ]
 license = "MIT"
 dependencies = [
-    "fastapi~=0.115.7", # Última versión estable de FastAPI.
-    "pymongo[srv]~=4.11", # Última versión de PyMongo con soporte para SRV URIs.
-    "motor~=3.6.1", # Motor async para MongoDB.
-    "python-dotenv~=1.0.0", # Carga de variables de entorno.
-    "uvicorn[standard]~=0.34.0", # Servidor ASGI con soporte completo.
-    "pydantic[email]~=2.10.6", # Validación moderna con Pydantic 2.x.
+    "fastapi~=0.115.8",
+    "pymongo~=4.11",
+    "motor~=3.7.0",
+    "python-dotenv~=1.0.0",
+    "uvicorn[standard]~=0.34.0",
+    "pydantic[email]~=2.10.4",
     "pydantic-settings~=2.7.1",
-    "confluent-kafka~=2.8.0",
-    "celery",
-    "redis",
-    "prometheus-client", # Cliente de métricas para Prometheus
-    "opentelemetry-api",
-    "opentelemetry-sdk",
-    "opentelemetry-instrumentation-fastapi",
-    "opentelemetry-instrumentation-logging",
-    "opentelemetry-instrumentation-requests",
-    "opentelemetry-exporter-otlp",
-    "scikit-learn",
-    "pandas",
-    "numpy",
-    "requests", # Para consumir logs desde Loki
-    "matplotlib",
-    "joblib",  # Para guardar el modelo entrenado
-    "tensorflow",  # Para entrenar LSTM
-    "torch", "transformers",  # Para Transformers
-    "sentencepiece"  # Necesario para BERT Tokenizer
+    "kafka-python~=2.0.2",
+    "celery~=5.4.0",
+    "redis~=5.2.1",
+    "prometheus-client~=0.21.1",
+    "prometheus-fastapi-instrumentator~=7.0.2",
+    "opentelemetry-api~=1.21.0",
+    "opentelemetry-sdk~=1.21.0",
+    "opentelemetry-instrumentation-fastapi~=0.38b0",
+    "opentelemetry-instrumentation-logging~=0.38b0",
+    "opentelemetry-instrumentation-requests~=0.38b0",
+    "opentelemetry-exporter-otlp~=1.21.0",
+    "opentelemetry-exporter-otlp-proto-grpc~=1.21.0",
+    "scikit-learn~=1.6.1",
+    "pandas~=2.2.3",
+    "numpy>=1.26.0,<2.0.0",
+    "requests~=2.32.3",
+    "matplotlib~=3.10.0",
+    "joblib~=1.4.2",
+    "tensorflow~=2.16.2",
+    "torch~=2.2.2",
+    "transformers~=4.48.2",
+    "sentencepiece~=0.2.0",
 ]
 
 [project.optional-dependencies]
-docs = [""]
-tests = [
-    "pytest",
+dev = [
+    "pytest~=8.3.4",
+    "pytest-asyncio~=0.25.3",
+    "black~=25.1.0",
+    "flake8~=7.1.1",
+    "isort~=6.0.0",
+    "mypy~=1.14.1",
+    "pre-commit~=4.1.0"
 ]
 
 [tool.hatch.build.targets.sdist]
+
 [tool.hatch.build.targets.wheel]
-packages = ["src/app/main"]
+packages = ["src"]
+include = ["src/**"]
+
+[tool.hatch.version]
+path = "src/__init__.py"
 
 [tool.hatch.envs.default]
 path = ".venv"

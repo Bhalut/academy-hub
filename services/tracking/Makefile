@@ -1,13 +1,13 @@
 run:
-    docker-compose up --build
+	docker-compose up --build
 
 test:
-    hatch run pytest
+	hatch run pytest
 
 lint:
-    hatch run black src
-    hatch run isort src
-    hatch run mypy src
+	hatch run black src
+	hatch run isort src
+	hatch run mypy src
 
 stop:
-    docker-compose down
+	docker-compose down
