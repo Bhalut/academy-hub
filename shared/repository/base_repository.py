@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, List
 
 
 class BaseRepository(ABC):
+
     @abstractmethod
     async def insert(self, collection: str, data: Dict[str, Any]) -> bool:
         pass
