@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shared"
+version = "0.1.0"
+description = "Common utilities for traceability, metrics, logging, and repository abstraction in microservices."
+readme = "README.md"
+authors = [
+    { name = "Abdel Mejia", email = "abdel.mejia@polygon.us" }
+]
+license = { text = "MIT" }
+dependencies = [
+    "opentelemetry-api~=1.21.0",
+    "opentelemetry-sdk~=1.21.0",
+    "opentelemetry-exporter-otlp-proto-grpc~=1.21.0",
+    "opentelemetry-instrumentation-fastapi~=0.38b0",
+    "fastapi~=0.115.8",
+    "prometheus-client~=0.21.1",
+    "starlette~=0.45.3"
+]
+
+[project.urls]
+Homepage = "https://github.com/polygonus/academy-hub"
+Repository = "https://github.com/polygonus/academy-hub"
+
+[tool.hatch.build.targets.wheel]
+packages = ["shared"]
+include = ["shared/**"]
+
+[tool.hatch.version]
+path = "shared/__init__.py"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+strict = true
