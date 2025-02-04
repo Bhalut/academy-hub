@@ -1,14 +1,15 @@
 services:
-  tracking-service:
+  tracking:
     build:
-      context: ../services/tracking_service
-    ports:
-      - "8000:8000"
+      context: ..
+      dockerfile: services/tracking/Dockerfile
     env_file:
-      - ../services/tracking_service/.env
+      - ../services/tracking/.env
     depends_on:
       mongodb:
         condition: service_healthy
+    ports:
+      - "8000:8000"
 
   mongodb:
     image: mongo:8.0
@@ -77,22 +78,22 @@ services:
       - ./infrastructure/promtail-config.yaml:/etc/promtail/promtail-config.yaml
     command: -config.file=/etc/promtail/promtail-config.yaml
 
-  anomaly-detector:
-    build: .
-    command: [ "python", "ml/detect_anomalies.py" ]
-    depends_on:
-      - loki
+#  anomaly-detector:
+#    build: .
+#    command: [ "python", "ml/detect_anomalies.py" ]
+#    depends_on:
+#      - loki
 
-  status:
-    build: services/status
-    ports:
-      - "3001:3000"
-    depends_on:
-      - tracking-service
-      - kafka
-      - rabbitmq
-      - mongo
-      - prometheus
+#  status:
+#    build: services/status
+#    ports:
+#      - "3001:3000"
+#    depends_on:
+#      - tracking
+#      - kafka
+#      - rabbitmq
+#      - mongo
+#      - prometheus
 
 volumes:
   mongo_data:
