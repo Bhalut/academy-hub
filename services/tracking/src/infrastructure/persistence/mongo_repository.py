@@ -2,9 +2,10 @@ from typing import Any, Dict, List, Optional
 
 import motor.motor_asyncio
 from fastapi import HTTPException
-from services.tracking.src.config.settings import settings
+
 from shared.logger import log_error, log_event
 from shared.repository.base_repository import BaseRepository
+from ...config.settings import settings
 
 client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_uri)
 db = client["tracking"]
@@ -30,7 +31,7 @@ class MongoRepository(BaseRepository):
             return None
 
     async def find_all(
-        self, collection: str, filters: Dict[str, Any]
+            self, collection: str, filters: Dict[str, Any]
     ) -> List[Dict[str, Any]]:
         try:
             return await db[collection].find(filters).to_list(length=100)
@@ -39,7 +40,7 @@ class MongoRepository(BaseRepository):
             return []
 
     async def update(
-        self, collection: str, id: str, update_data: Dict[str, Any]
+            self, collection: str, id: str, update_data: Dict[str, Any]
     ) -> bool:
         try:
             result = await db[collection].update_one({"_id": id}, {"$set": update_data})
