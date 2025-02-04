@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import Field
 
-from . import BaseEvent
+from .base import BaseEvent
 
 
 class AssignmentEvent(BaseEvent):

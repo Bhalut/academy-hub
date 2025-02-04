@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import ORJSONResponse
-from services.tracking.src.application.services.event_processor import process_event
-from services.tracking.src.infrastructure.persistence.mongo_repository import (
+
+from shared.logger import log_error
+from ...application.services.event_processor import process_event
+from ...infrastructure.persistence.mongo_repository import (
     MongoRepository,
 )
-from services.tracking.src.interface.api.schemas import EventSchema
-from shared.logger import log_error
+from ...interface.api.schemas import EventSchema
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ def get_mongo_repo() -> MongoRepository:
 
 @router.post("/events/", response_class=ORJSONResponse)
 async def create_event(
-    event: EventSchema, repo: MongoRepository = Depends(get_mongo_repo)
+        event: EventSchema, repo: MongoRepository = Depends(get_mongo_repo)
 ):
     event_data = event.model_dump(by_alias=True)
 

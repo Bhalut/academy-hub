@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel, Field
 
-from . import BaseEvent
+from .base import BaseEvent
 
 
 class QuizQuestionDetail(BaseModel):

@@ -1,6 +1,6 @@
 from pydantic import Field
 
-from . import BaseEvent
+from .base import BaseEvent
 
 
 class FileUploadEvent(BaseEvent):

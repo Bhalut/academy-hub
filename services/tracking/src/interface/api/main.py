@@ -1,4 +1,4 @@
-import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,10 +6,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from shared.metrics import setup_metrics
 from shared.tracing import setup_tracing
 from .routes import router
+from ...infrastructure.messaging.kafka_producer import kafka_manager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await kafka_manager.start()
+    yield
+    await kafka_manager.stop()
+
 
 app = FastAPI(
     title="User Data Tracking Service",
-    docs_url="/docs" if os.getenv("ENV") == "development" else None,
+    docs_url="/docs",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
