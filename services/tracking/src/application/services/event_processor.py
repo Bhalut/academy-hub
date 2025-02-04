@@ -1,11 +1,7 @@
-from ...config.tasks import process_event_data
-from ...infrastructure.messaging.kafka_producer import (
-    send_event_to_kafka,
-)
-from ...infrastructure.persistence.mongo_repository import (
-    MongoRepository,
-)
 from shared.logger import log_error, log_event
+from ...config.tasks import process_event_data
+from ...infrastructure.messaging.kafka_producer import kafka_manager
+from ...infrastructure.persistence.mongo_repository import MongoRepository
 
 repo = MongoRepository()
 
@@ -18,10 +14,9 @@ async def process_event(event_data: dict):
             return {"error": "Invalid event: missing event_type"}
 
         collection_name = f"{event_type}_events"
-
         log_event(event_data)
 
-        if not send_event_to_kafka(event_data):
+        if not await kafka_manager.send_event_to_kafka(event_data):
             log_error("Failed to send event to Kafka")
             return {"error": "Failed to send event to Kafka"}
 
