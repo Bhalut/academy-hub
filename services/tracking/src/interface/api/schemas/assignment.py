@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import Field
 
@@ -6,6 +6,7 @@ from .base import BaseEvent
 
 
 class AssignmentEvent(BaseEvent):
+    event_type: Literal["assignment"] = "assignment"
     course_id: str = Field(..., description="Associated course ID.")
     assignment_id: str = Field(..., description="Unique ID for the assignment.")
     submission_status: str = Field(

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import Field
 
@@ -6,6 +6,7 @@ from .base import BaseEvent
 
 
 class LoginEvent(BaseEvent):
+    event_type: Literal["login"] = "login"
     ip_address: str = Field(..., description="IP address of the user.")
     device: dict = Field(
         ...,

@@ -1,17 +1,16 @@
+from typing import Literal
+
 from pydantic import Field
 
 from .base import BaseEvent
 
 
 class LessonEvent(BaseEvent):
+    event_type: Literal["lesson"] = "lesson"
     course_id: str = Field(..., description="Associated course ID.")
     lesson_id: str = Field(..., description="Unique ID for the lesson.")
-    duration: float = Field(
-        ..., ge=0, description="Time spent on the lesson in seconds."
-    )
-    completion_status: str = Field(
-        ..., description="Completion status (e.g., completed, not_started)."
-    )
+    duration: float = Field(..., ge=0, description="Time spent on the lesson in seconds.")
+    completion_status: str = Field(..., description="Completion status (e.g., completed, not_started).")
 
     model_config = {
         "json_schema_extra": {

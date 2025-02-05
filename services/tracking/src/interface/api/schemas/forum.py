@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import Field
 
@@ -6,6 +6,7 @@ from .base import BaseEvent
 
 
 class ForumEvent(BaseEvent):
+    event_type: Literal["forum"] = "forum"
     forum_id: str = Field(..., description="Unique ID of the forum.")
     post_id: str = Field(..., description="Unique ID of the post.")
     action: str = Field(

@@ -1,19 +1,16 @@
+from typing import Literal
+
 from pydantic import Field
 
 from .base import BaseEvent
 
 
 class FileUploadEvent(BaseEvent):
-    activity_id: str = Field(
-        ..., description="Activity ID associated with the file upload."
-    )
+    event_type: Literal["file_upload"] = "file_upload"
+    activity_id: str = Field(..., description="Activity ID associated with the file upload.")
     file_type: str = Field(..., description="Type of file uploaded (e.g., pdf, video).")
-    file_size: float = Field(
-        ..., ge=0, description="Size of the uploaded file in bytes."
-    )
-    upload_status: str = Field(
-        ..., description="Status of the upload (e.g., completed, failed)."
-    )
+    file_size: float = Field(..., ge=0, description="Size of the uploaded file in bytes.")
+    upload_status: str = Field(..., description="Status of the upload (e.g., completed, failed).")
 
     model_config = {
         "json_schema_extra": {

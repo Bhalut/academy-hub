@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import Field
 
@@ -6,6 +6,7 @@ from .base import BaseEvent
 
 
 class FeedbackEvent(BaseEvent):
+    event_type: Literal["feedback"] = "feedback"
     course_id: str = Field(..., description="Associated course ID.")
     feedback_type: str = Field(
         ..., description="Type of feedback (e.g., lesson, quiz)."

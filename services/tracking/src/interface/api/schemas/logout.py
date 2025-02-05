@@ -1,9 +1,12 @@
+from typing import Literal
+
 from pydantic import Field
 
 from .base import BaseEvent
 
 
 class LogoutEvent(BaseEvent):
+    event_type: Literal["logout"] = "logout"
     ip_address: str = Field(..., description="IP address of the user.")
     device: dict = Field(
         ...,

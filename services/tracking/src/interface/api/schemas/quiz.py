@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal
 
 from pydantic import BaseModel, Field
 
@@ -8,21 +8,18 @@ from .base import BaseEvent
 class QuizQuestionDetail(BaseModel):
     question_id: str = Field(..., description="Unique ID for the question.")
     correct: bool = Field(..., description="Whether the answer was correct.")
-    time_spent: float = Field(
-        ..., ge=0, description="Time spent on the question in seconds."
-    )
+    time_spent: float = Field(..., ge=0, description="Time spent on the question in seconds.")
 
 
 class QuizEvent(BaseEvent):
+    event_type: Literal["quiz"] = "quiz"
     course_id: str = Field(..., description="Associated course ID.")
     quiz_id: str = Field(..., description="Unique identifier for the quiz.")
     attempt_id: str = Field(..., description="Unique identifier for this attempt.")
     score: float = Field(..., ge=0, description="Score achieved by the user.")
     max_score: float = Field(..., ge=0, description="Maximum possible score.")
     time_taken: float = Field(..., ge=0, description="Time taken to complete the quiz.")
-    questions: List[QuizQuestionDetail] = Field(
-        ..., description="Details of each question attempted during the quiz."
-    )
+    questions: List[QuizQuestionDetail] = Field(..., description="Details of each question attempted during the quiz.")
 
     model_config = {
         "json_schema_extra": {

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import Field
 
@@ -6,6 +6,7 @@ from .base import BaseEvent
 
 
 class ClickEvent(BaseEvent):
+    event_type: Literal["click"] = "click"
     course_id: Optional[str] = Field(None, description="Associated course ID.")
     page: str = Field(..., description="Page where the interaction occurred.")
     action: str = Field(..., description="Action performed (e.g., clicked, opened).")

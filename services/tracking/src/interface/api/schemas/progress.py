@@ -1,17 +1,16 @@
+from typing import Literal
+
 from pydantic import Field
 
 from .base import BaseEvent
 
 
 class ProgressEvent(BaseEvent):
+    event_type: Literal["progress"] = "progress"
     course_id: str = Field(..., description="Associated course ID.")
     lesson_id: str = Field(..., description="Associated lesson ID.")
-    progress_percentage: float = Field(
-        ..., ge=0, le=100, description="Completion percentage."
-    )
-    completion_status: str = Field(
-        ..., description="Status of progress (e.g., completed, in_progress)."
-    )
+    progress_percentage: float = Field(..., ge=0, le=100, description="Completion percentage.")
+    completion_status: str = Field(..., description="Status of progress (e.g., completed, in_progress).")
 
     model_config = {
         "json_schema_extra": {
