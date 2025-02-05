@@ -12,13 +12,16 @@ db = client["tracking"]
 
 
 class MongoRepository(BaseRepository):
-    async def insert(self, collection: str, data: Dict[str, Any]) -> bool:
+    async def insert(self, collection: str, data: Dict[str, Any]) -> Dict[str, Any]:
         try:
             if "_id" in data:
                 del data["_id"]
             result = await db[collection].insert_one(data)
+
+            data["_id"] = str(result.inserted_id)
+
             log_event({"mongo_insert_success": data})
-            return result.acknowledged
+            return data
         except Exception as e:
             log_error(f"Database error: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
