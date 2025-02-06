@@ -3,6 +3,7 @@ import json
 import os
 
 from aiokafka import AIOKafkaProducer
+from kafka.errors import KafkaError
 
 from shared.logger import log_error, log_event
 from ...interface.api.schemas import EventSchema
@@ -28,7 +29,7 @@ class KafkaProducerManager:
             )
             await self.producer.start()
             log_event({"message": "Kafka Producer started"})
-        except Exception as e:
+        except KafkaError as e:
             log_error(f"Failed to connect to Kafka: {str(e)}")
 
     async def stop(self):
@@ -42,15 +43,11 @@ class KafkaProducerManager:
             return False
 
         try:
-            if hasattr(event, "model_dump"):
-                payload = event.model_dump(by_alias=True)
-            else:
-                payload = event
-
-            topic = f"tracking_{payload.get('event_type')}"
+            payload = event.model_dump(by_alias=True) if hasattr(event, "model_dump") else event
+            topic = f"tracking_{payload.get('event_type', 'default')}"
             await self.producer.send_and_wait(topic, payload)
             return True
-        except Exception as e:
+        except KafkaError as e:
             log_error(f"Error sending event to Kafka: {str(e)}")
             return False
 
