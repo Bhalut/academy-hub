@@ -19,6 +19,7 @@ dependencies = [
     "pydantic[email]~=2.10.4",
     "pydantic-settings~=2.7.1",
     "aiokafka~=0.12.0",
+    "kafka-python~=2.0.2",
     "celery~=5.4.0",
     "redis~=5.2.1",
     "prometheus-client~=0.21.1",
@@ -70,7 +71,7 @@ path = ".venv"
 
 [tool.black]
 line-length = 88
-target-version = ['py312']
+target-version = ['py311']
 
 [tool.isort]
 profile = "black"
