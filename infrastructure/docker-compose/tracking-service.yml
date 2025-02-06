@@ -1,0 +1,18 @@
+services:
+  tracking:
+    build:
+      context: ..
+      dockerfile: services/tracking/Dockerfile
+    env_file:
+      - ../services/tracking/.env
+    networks:
+      - tracking_network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    ports:
+      - "8000:8000"

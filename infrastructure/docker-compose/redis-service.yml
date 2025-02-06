@@ -1,0 +1,7 @@
+services:
+  redis:
+    image: redis:latest
+    networks:
+      - tracking_network
+    ports:
+      - "6379:6379"

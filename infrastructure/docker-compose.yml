@@ -5,6 +5,8 @@ services:
       dockerfile: services/tracking/Dockerfile
     env_file:
       - ../services/tracking/.env
+    networks:
+      - tracking_network
     depends_on:
       mongodb:
         condition: service_healthy
@@ -17,11 +19,12 @@ services:
 
   mongodb:
     image: mongo:8.0
-    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - tracking_network
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
       interval: 10s
@@ -41,6 +44,8 @@ services:
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    networks:
+      - tracking_network
     ports:
       - "9092:9092"
     healthcheck:
@@ -52,11 +57,15 @@ services:
 
   redis:
     image: redis:latest
+    networks:
+      - tracking_network
     ports:
       - "6379:6379"
 
   prometheus:
     image: prom/prometheus
+    networks:
+      - tracking_network
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
@@ -64,6 +73,8 @@ services:
 
   grafana:
     image: grafana/grafana
+    networks:
+      - tracking_network
     ports:
       - "3000:3000"
     environment:
@@ -76,6 +87,8 @@ services:
 
   otel-collector:
     image: otel/opentelemetry-collector
+    networks:
+      - tracking_network
     ports:
       - "4317:4317"
     volumes:
@@ -83,6 +96,8 @@ services:
 
   loki:
     image: grafana/loki:latest
+    networks:
+      - tracking_network
     ports:
       - "3100:3100"
     volumes:
@@ -90,6 +105,8 @@ services:
 
   promtail:
     image: grafana/promtail:latest
+    networks:
+      - tracking_network
     volumes:
       - /var/log:/var/log
       - ./infrastructure/promtail-config.yaml:/etc/promtail/promtail-config.yaml
@@ -111,6 +128,9 @@ services:
 #      - rabbitmq
 #      - mongo
 #      - prometheus
+
+networks:
+  tracking_network:
 
 volumes:
   mongo_data:

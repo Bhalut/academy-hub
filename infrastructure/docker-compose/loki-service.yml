@@ -1,0 +1,9 @@
+services:
+  loki:
+    image: grafana/loki:latest
+    networks:
+      - tracking_network
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./infrastructure/loki-config.yaml:/etc/loki/loki-config.yaml

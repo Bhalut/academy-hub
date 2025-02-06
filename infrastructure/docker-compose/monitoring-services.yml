@@ -1,0 +1,23 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    networks:
+      - tracking_network
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    networks:
+      - tracking_network
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana-dashboard.json:/var/lib/grafana/dashboards/tracking-dashboard.json
+      - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana-provisioning/notifiers.yaml:/etc/grafana/provisioning/notifiers/notifiers.yaml
