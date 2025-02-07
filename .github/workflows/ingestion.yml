@@ -1,0 +1,61 @@
+name: CI/CD for Ingestion Service
+
+on:
+  push:
+    paths:
+      - "services/ingestion/**"
+      - ".github/workflows/ingestion.yml"
+  pull_request:
+    paths:
+      - "services/ingestion/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          pip install hatch
+          cd services/ingestion
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          cd services/ingestion
+          pytest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t myrepo/ingestion-service:latest -f services/ingestion/Dockerfile .
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push myrepo/ingestion-service:latest
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull myrepo/ingestion-service:latest
+            docker stop ingestion || true
+            docker rm ingestion || true
+            docker run -d --name ingestion -p 8020:8020 --network tracking_network myrepo/ingestion-service:latest
