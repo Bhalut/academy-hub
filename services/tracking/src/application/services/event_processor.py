@@ -1,11 +1,16 @@
 import datetime
+import os
 
-from shared.logger import log_error, log_event
-from ...config.tasks import process_event_data
-from ...infrastructure.factory import Factory
+import httpx
+import redis
 
-repo = Factory.get_repository()
-messaging = Factory.get_messaging()
+from shared.logger import log_error
+
+INGESTION_SERVICE_URL = os.getenv("INGESTION_SERVICE_URL", "http://ingestion:8020")
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+
+r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 
 def serialize_event_data(event_data):
@@ -21,23 +26,15 @@ def serialize_event_data(event_data):
 async def process_event(event_data: dict):
     try:
         event_data = serialize_event_data(event_data)
-
-        event_type = event_data.get("event_type")
-        if not event_type:
-            log_error("Invalid event: missing event_type")
-            return {"error": "Invalid event: missing event_type"}
-
-        collection_name = f"{event_type}_events"
-        log_event(event_data)
-
-        if not await messaging(event_data):
-            log_error("Failed to send event")
-            return {"error": "Failed to send event"}
-
-        result = await repo.insert(collection_name, event_data)
-        process_event_data.delay(event_data)
-
-        return result
-    except Exception as e:
-        log_error(f"Error processing event: {str(e)}")
-        return {"error": str(e)}
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{INGESTION_SERVICE_URL}/events/",
+                json=event_data,
+                timeout=2.0,
+            )
+            response.raise_for_status()
+            return response.json()
+    except (httpx.RequestError, httpx.HTTPStatusError) as e:
+        log_error(f"Ingestion unreachable, storing event in Redis queue: {str(e)}")
+        r.rpush("tracking_failed_events", event_data)
+        return {"error": "Ingestion service not available, event stored in redis"}
