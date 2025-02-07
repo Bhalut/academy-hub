@@ -1,0 +1,11 @@
+groups:
+  - name: tracking_alerts
+    rules:
+      - alert: TrackingDown
+        expr: up{job="tracking"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tracking service is down"
+          description: "No response from tracking service for 1 minute"

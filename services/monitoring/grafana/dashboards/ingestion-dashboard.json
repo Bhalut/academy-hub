@@ -1,0 +1,17 @@
+{
+  "dashboard": {
+    "title": "Ingestion Service Metrics",
+    "panels": [
+      {
+        "title": "Messages Consumed Per Second",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(kafka_messages_consumed_total{job='ingestion'}[5m])",
+            "legendFormat": "Messages"
+          }
+        ]
+      }
+    ]
+  }
+}

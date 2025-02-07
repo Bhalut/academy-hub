@@ -1,0 +1,17 @@
+{
+  "dashboard": {
+    "title": "Monitoring Service Overview",
+    "panels": [
+      {
+        "title": "Service Uptime",
+        "type": "table",
+        "targets": [
+          {
+            "expr": "up",
+            "legendFormat": "{{job}}"
+          }
+        ]
+      }
+    ]
+  }
+}

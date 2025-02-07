@@ -1,0 +1,17 @@
+{
+  "dashboard": {
+    "title": "Storage Service Metrics",
+    "panels": [
+      {
+        "title": "Stored Events in PostgreSQL",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(storage_insert_success_total{job='storage'}[5m])",
+            "legendFormat": "Stored Events"
+          }
+        ]
+      }
+    ]
+  }
+}

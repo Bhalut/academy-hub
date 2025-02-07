@@ -1,0 +1,17 @@
+{
+  "dashboard": {
+    "title": "Tracking Metrics",
+    "panels": [
+      {
+        "title": "Requests per Second",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job='tracking'}[5m])",
+            "legendFormat": "Requests"
+          }
+        ]
+      }
+    ]
+  }
+}

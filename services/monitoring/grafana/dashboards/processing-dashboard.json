@@ -1,0 +1,17 @@
+{
+  "dashboard": {
+    "title": "Processing Service Metrics",
+    "panels": [
+      {
+        "title": "Processed Events",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(events_processed_total{job='processing'}[5m])",
+            "legendFormat": "Processed Events"
+          }
+        ]
+      }
+    ]
+  }
+}
