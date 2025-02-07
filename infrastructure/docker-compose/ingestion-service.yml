@@ -1,0 +1,14 @@
+services:
+  ingestion:
+    build:
+      context: ..
+      dockerfile: services/ingestion/Dockerfile
+    env_file:
+      - ../services/ingestion/.env
+    networks:
+      - tracking_network
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8020:8020"

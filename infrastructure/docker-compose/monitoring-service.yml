@@ -1,0 +1,9 @@
+services:
+  monitoring:
+    build:
+      context: ..
+      dockerfile: services/monitoring/Dockerfile
+    networks:
+      - tracking_network
+    ports:
+      - "3000:3000"

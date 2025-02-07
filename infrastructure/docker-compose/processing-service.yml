@@ -1,0 +1,14 @@
+services:
+  processing:
+    build:
+      context: ..
+      dockerfile: services/processing/Dockerfile
+    env_file:
+      - ../services/processing/.env
+    networks:
+      - tracking_network
+    depends_on:
+      redis:
+        condition: service_started
+    ports:
+      - "8030:8030"
